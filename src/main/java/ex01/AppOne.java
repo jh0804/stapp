@@ -34,6 +34,8 @@ public class AppOne {
         OrderOption orOption1 = new OrderOption(1, "파란바지", 2, 2000, p1, or1);
         OrderOption orOption2 = new OrderOption(2, "빨간바지", 2, 4000, p1, or1);
         OrderOption orOption3 = new OrderOption(3, "하얀티", 5, 10000, p2, or1);
+        List<OrderOption> or1Options = Arrays.asList(orOption1, orOption2, orOption3);
+
 
         op1.setQty(op1.getQty() - 2);
         op2.setQty(op2.getQty() - 2);
@@ -44,35 +46,37 @@ public class AppOne {
 
         op3.setQty(op3.getQty() - 7);
 
-        // 4. 상품 목록 화면
-        // 1번 문제 : 상품 목록 화면
-        // List<Product> -> List<ProductDTO>
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        for (Product p : products) {
-            productDTOList.add(new ProductDTO(p));
-        }
-
-//        System.out.println(productDTOList);
-
+        // Gson 초기화
         Gson gson = new Gson();
-        String json = gson.toJson(productDTOList);
-        System.out.println(json);
+
+        // 1번 문제 : 상품 목록 화면
+        // List<Product> -> List<ProductDTO> : 깊은 복사
+        // 옮기고 싶은 애의 크기만큼 돌아야 된다.
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        // iterate -> 처음부터 full scan = for Each (중간부터 불가)
+        for (Product p : products) { // for(int i=0;i<productDTOs.size();i++) -> 크기 제어하고 싶은 경우
+            productDTOs.add(new ProductDTO(p));
+        }
+        String ex01 = gson.toJson(productDTOs);
+        System.out.println(ex01);
 
         // 2번 문제 : 상품 상세 화면 (p2)
         // Product(p2, p2Options) -> ProductDetail
-        List<ProductDetailDTO> productDetailDTOList = new ArrayList<>();
-        productDetailDTOList.add(new ProductDetailDTO(p2,p2Options));
+        ProductDetailDTO productDetailDTO =new ProductDetailDTO(p2,p2Options);
+        String ex02 = gson.toJson(productDetailDTO);
+        System.out.println(ex02);
 
-        Gson gson1 = new Gson();
-        String json1 = gson1.toJson(productDetailDTOList);
-        System.out.println(json1);
-
-        // 3번 문제 : 주문 확인 상세 화면 (or2)
+        // 3번 문제 : 주문 확인 상세 화면 (or2) - orOption4
         // 틀렸음 : TempDTO 담기
-
+        TempDTO tempDTO = new TempDTO(orOption4);
+        String ex03 = gson.toJson(tempDTO);
+        System.out.println(ex03);
 
         // 4번 문제 : 주문 확인 상세 화면 (or1)
-        // (orOption1, orOption2), (orOption3) -> OrderDetailDTO
+        // p1(orOption1, orOption2), p2(orOption3) -> OrderDetailDTO
+        OrderDetailDTO orderDetailDTO = new OrderDetailDTO(or1Options);
+        String ex04 = gson.toJson(orderDetailDTO);
+        System.out.println(ex04);
 
     }
 }
